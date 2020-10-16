@@ -1,0 +1,10 @@
+
+Connects JS and C++ code:
+process.binding()
+
+V8 and libuv => NodeJS => Pure JS
+
+
+crypto.pbkdf2()
+process.env.UV_THREADPOOL_SIZE = 2;
+specifying how many threads to use while running program (default 4);
