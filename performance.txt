@@ -6,7 +6,7 @@ Multiple node processes => parent cluster manager (monitors health of each indiv
 
 APACHE BENCHMARK (on MacOS)
 $ ab
-$ ac -c 50 -n 500 localhost:3000/fast       => 500 requests on apache benchmark (50 concurrently)
+$ ab -c 50 -n 500 localhost:3000/fast       => 500 requests on apache benchmark (50 concurrently)
 
 Over allocation of instances (try 6 children and one pool size)
 
@@ -26,7 +26,13 @@ $ pm2 monit
 // To stop running instances
 $ pm2 delete <name>
 
+
+
 2. Worker Threads => Experimental
+$ npm i webworker-threads
+
+Checking benchmark performance using APACHE BENCHMARK
+$ ab -c 2 -n 2 localhost:3000/fast 
 
 
 STEPS
