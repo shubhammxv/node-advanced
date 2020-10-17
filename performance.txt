@@ -1,0 +1,13 @@
+
+IMPROVING NODE PERFORMANCE
+
+1. Clustering => Multiple node instances (multiple event loops; one for each)
+2. Worker Threads => Experimental
+
+
+STEPS
+i). Basic express app setup
+
+
+NOTE
+1) nodemon doesn't work nicely with clustering; avoid it in this project

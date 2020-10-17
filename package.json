@@ -1,0 +1,19 @@
+{
+  "name": "node-advanced",
+  "version": "1.0.0",
+  "description": "Node advanced course reference",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://shubhamxv@bitbucket.org/shubhamxv/node-advanced.git"
+  },
+  "author": "Shubham Mishra",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/shubhamxv/node-advanced#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
