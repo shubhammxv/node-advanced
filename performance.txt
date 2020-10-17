@@ -8,6 +8,24 @@ APACHE BENCHMARK (on MacOS)
 $ ab
 $ ac -c 50 -n 500 localhost:3000/fast       => 500 requests on apache benchmark (50 concurrently)
 
+Over allocation of instances (try 6 children and one pool size)
+
+pm2 module => cluster management system
+Running server using pm2 (usually in production environments)
+
+$ npm install -g pm2
+
+Inside project dir
+
+// no of instances; 0 means we don't know and om2 sets no of instances to no of logical cores(hyper/multi threading) in device
+$ pm2 start index.js -i 0
+$ pm2 list
+$ pm2 show <showname>
+$ pm2 monit
+
+// To stop running instances
+$ pm2 delete <name>
+
 2. Worker Threads => Experimental
 
 
