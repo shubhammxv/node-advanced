@@ -1,0 +1,19 @@
+To install on MacOS
+
+$ brew install redis
+
+Starting redis locally
+$ brew services start redis         // restart instead of start for restarting
+$ redis-cli ping      // PONG
+
+Stopping
+$ brew services stop redis
+$ redis-cli shutdown
+
+
+// Can only store strings and letters
+For objects using JSON.stringify(data) for storing and then JSON.parse(data) while retrieving
+
+// Wiping out all data
+create redis client
+then run client.flushall();
