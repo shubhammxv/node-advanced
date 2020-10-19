@@ -24,7 +24,12 @@ mongoose.Query.prototype.exec = async function() {
     // If present in REDIS, then return the cacheValue
     console.log("Returning cached value...");
     // Return value should be instance of Mongo Documents; not JS objects
-    const mongoDocs = new this.model(JSON.parse(cacheValue));
+    // Also there can be array of Documents
+    const cacheData = JSON.parse(cacheValue);
+    const mongoDocs = Array.isArray(cacheData)
+      ? cacheData.map(doc => new this.model(doc))
+      : new this.model(cacheData)
+
     return mongoDocs;
   }
 
