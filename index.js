@@ -11,6 +11,8 @@ const keys = require('./config/keys');
 const authRoutes = require('./routes/auth');
 const blogRoutes = require('./routes/blog');
 
+require('./services/cache');
+
 const dbCredentials = `${process.env.mongoUser}:${process.env.mongoPassword}`;
 const dbUri = `mongodb+srv://${dbCredentials}@cluster0.bdbz0.mongodb.net/blogs?retryWrites=true&w=majority`;
 

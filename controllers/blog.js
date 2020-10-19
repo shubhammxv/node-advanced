@@ -7,12 +7,12 @@ exports.getBlogs = async (req, res, next) => {
   // Checking in redis if data is present already
   // Key is userId
   // data isn't returned immediately; need to use callback; doesn't support promises natively
-  const cachedBlogs = await redisClient.get(req.user.id);
-  if (cachedBlogs) {
-    console.log("Serving from redis cache...");
-    // Data is stored in stringified way in redis
-    return res.send(JSON.parse(cachedBlogs));
-  }
+  // const cachedBlogs = await redisClient.get(req.user.id);
+  // if (cachedBlogs) {
+  //   console.log("Serving from redis cache...");
+  //   // Data is stored in stringified way in redis
+  //   return res.send(JSON.parse(cachedBlogs));
+  // }
 
   // If data not present in redis-cache
   console.log("Fetching and serving from db...");
@@ -20,7 +20,7 @@ exports.getBlogs = async (req, res, next) => {
   res.send(blogs);
 
   // Storing fetched data in redis for next time
-  redisClient.set(req.user.id, JSON.stringify(blogs));
+  // redisClient.set(req.user.id, JSON.stringify(blogs));
 }
 
 exports.getBlog = async (req, res, next) => {
