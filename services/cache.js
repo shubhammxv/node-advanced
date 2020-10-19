@@ -50,6 +50,8 @@ mongoose.Query.prototype.exec = async function() {
   // If cacheValue not present; execute query, store in redis and return queryResult
   console.log("Fetching and Returning from db...");
   const queryResult = await exec.apply(this, arguments);
-  redisClient.set(redisKey, JSON.stringify(result));
+  
+  // 'EX' to set expiration time in seconds as 4th arg
+  redisClient.set(redisKey, JSON.stringify(result), 'EX', 3600);
   return queryResult;
 }
