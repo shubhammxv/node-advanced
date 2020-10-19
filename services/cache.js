@@ -23,7 +23,9 @@ mongoose.Query.prototype.exec = async function() {
   if (cacheValue) {
     // If present in REDIS, then return the cacheValue
     console.log("Returning cached value...");
-    return JSON.parse(cacheValue);
+    // Return value should be instance of Mongo Documents; not JS objects
+    const mongoDocs = new this.model(JSON.parse(cacheValue));
+    return mongoDocs;
   }
 
   // If cacheValue not present; execute query, store in redis and return queryResult
