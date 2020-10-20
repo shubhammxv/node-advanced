@@ -1,8 +1,12 @@
 
 const Blog = require('../models/blog');
+const redisClient = require('../config/redis');
+const { clearHash } = require('../services/cache');
 
 exports.getBlogs = async (req, res, next) => {
-  const blogs = await Blog.find({ _user: req.user.id });
+  const blogs = await Blog
+    .find({ _user: req.user.id })
+    .cache({ key: req.user.id });   // Top level key in nested data for a single user
   res.send(blogs);
 }
 
@@ -29,4 +33,6 @@ exports.postBlog = async (req, res, next) => {
   } catch (err) {
     res.send(400, err);
   }
+  // Handling in cleanCache middleware
+  // clearHash(req.user.id);
 }

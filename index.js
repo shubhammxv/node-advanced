@@ -1,5 +1,4 @@
 require('dotenv').config();
-require('./services/passport');
 
 const express = require('express');
 const mongoose = require('mongoose');
@@ -10,6 +9,9 @@ const keys = require('./config/keys');
 
 const authRoutes = require('./routes/auth');
 const blogRoutes = require('./routes/blog');
+
+require('./services/passport');
+require('./services/cache');
 
 const dbCredentials = `${process.env.mongoUser}:${process.env.mongoPassword}`;
 const dbUri = `mongodb+srv://${dbCredentials}@cluster0.bdbz0.mongodb.net/blogs?retryWrites=true&w=majority`;
@@ -45,7 +47,7 @@ mongoose.connect(
   .then(result => {
     const port = process.env.PORT || 5000;
     app.listen(port);
-    console.log(`DB Connected. Listening on Port ${port}`);
+    console.log(`MongoDB Connected. Server listening on Port ${port}`);
   })
   .catch(err => {
     console.log("Err connecting MongoDB", err);

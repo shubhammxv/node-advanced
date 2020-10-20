@@ -3,6 +3,7 @@ const express = require('express');
 
 const blogController = require('../controllers/blog');
 const isAuth = require('../middlewares/isAuth');
+const cleanCache = require('../middlewares/cleanCache');
 
 const router = express.Router();
 
@@ -21,6 +22,7 @@ router.get(
 router.post(
   '/api/blogs',
   isAuth,
+  cleanCache,
   blogController.postBlog
 );
 
