@@ -1,7 +1,7 @@
 
 const Blog = require('../models/blog');
-
 const redisClient = require('../config/redis');
+const { clearHash } = require('../services/cache');
 
 exports.getBlogs = async (req, res, next) => {
   const blogs = await Blog
@@ -33,4 +33,6 @@ exports.postBlog = async (req, res, next) => {
   } catch (err) {
     res.send(400, err);
   }
+
+  clearHash(req.user.id);
 }

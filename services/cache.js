@@ -61,3 +61,10 @@ mongoose.Query.prototype.exec = async function() {
   redisClient.hset(this.hashKey, redisKey, JSON.stringify(result), 'EX', 3600);
   return queryResult;
 }
+
+module.exports = {
+  clearHash(hashKey) {
+    const redisKey = JSON.stringify(hashKey);
+    redisClient.del(redisKey);
+  }
+}
