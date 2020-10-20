@@ -33,6 +33,6 @@ exports.postBlog = async (req, res, next) => {
   } catch (err) {
     res.send(400, err);
   }
-
-  clearHash(req.user.id);
+  // Handling in cleanCache middleware
+  // clearHash(req.user.id);
 }
