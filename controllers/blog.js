@@ -6,7 +6,7 @@ const redisClient = require('../config/redis');
 exports.getBlogs = async (req, res, next) => {
   const blogs = await Blog
     .find({ _user: req.user.id })
-    .cache();
+    .cache({ key: req.user.id });   // Top level key in nested data for a single user
   res.send(blogs);
 }
 

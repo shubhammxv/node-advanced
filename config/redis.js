@@ -8,5 +8,6 @@ const redisURL = process.env.redisURL;
 const redisClient = redis.createClient(redisURL);
 
 redisClient.get = promisify(redisClient.get);
+redisClient.hget = promisify(redisClient.hget);
 
 module.exports = redisClient;

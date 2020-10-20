@@ -8,9 +8,13 @@ const exec = mongoose.Query.prototype.exec;
 
 // Instead of caching all queries; caching only queries having .cache() function chained
 // So adding function to Query prototype; makes accesible to all queries
-mongoose.Query.prototype.cache = function() {
+mongoose.Query.prototype.cache = function(options = {}) {
   // this points to Query instance; every instance has its own this
   this._cacheQuery = true;
+
+  // Using keys for nested hashes; Needs to be string or number
+  // Top level key in nested caches
+  this.hashKey = JSON.stringify(options.key || '');
 
   // Makes chainable to any other function at any point;
   // As the instance is returned the same as from any other function
@@ -33,7 +37,9 @@ mongoose.Query.prototype.exec = async function() {
   }));
 
   // Checking if "redisKey" is already present in REDIS
-  const cacheValue = await redisClient.get(redisKey);
+  // get for simple cache; hget for nested caches
+  // this.hashKey is top level key
+  const cacheValue = await redisClient.hget(this.hashKey, redisKey);
   if (cacheValue) {
     // If present in REDIS, then return the cacheValue
     console.log("Returning cached value...");
@@ -50,8 +56,8 @@ mongoose.Query.prototype.exec = async function() {
   // If cacheValue not present; execute query, store in redis and return queryResult
   console.log("Fetching and Returning from db...");
   const queryResult = await exec.apply(this, arguments);
-  
+
   // 'EX' to set expiration time in seconds as 4th arg
-  redisClient.set(redisKey, JSON.stringify(result), 'EX', 3600);
+  redisClient.hset(this.hashKey, redisKey, JSON.stringify(result), 'EX', 3600);
   return queryResult;
 }
