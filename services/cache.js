@@ -25,14 +25,14 @@ mongoose.Query.prototype.cache = function(options = {}) {
 // It creates query and calls .exec on query
 // So Checking in redis if query is already called before executing query
 mongoose.Query.prototype.exec = async function() {
-  console.log("Running a query...", this.getQuery());   // Query being executed
-  console.log("Collection running query...", this.mongooseCollection.name)    // Name of the Collection that called the query
+  // console.log("Running a query...", this.getQuery());   // Query being executed
+  // console.log("Collection running query...", this.mongooseCollection.name)    // Name of the Collection that called the query
 
   if (!this._cacheQuery) {
     return exec.apply(this, arguments);
   }
   // Creation of unique REDIS_KEY
-  const redisKey = JSON.stringify(Object.assign({}, this.query(), {
+  const redisKey = JSON.stringify(Object.assign({}, this.getQuery(), {
     collection: this.mongooseCollection.name
   }));
 
@@ -42,7 +42,7 @@ mongoose.Query.prototype.exec = async function() {
   const cacheValue = await redisClient.hget(this.hashKey, redisKey);
   if (cacheValue) {
     // If present in REDIS, then return the cacheValue
-    console.log("Returning cached value...");
+    console.log("Returning Cache from Redis...");
     // Return value should be instance of Mongo Documents; not JS objects
     // Also there can be array of Documents
     const cacheData = JSON.parse(cacheValue);
@@ -54,17 +54,18 @@ mongoose.Query.prototype.exec = async function() {
   }
 
   // If cacheValue not present; execute query, store in redis and return queryResult
-  console.log("Fetching and Returning from db...");
+  console.log("Fetching from MongoDB...");
   const queryResult = await exec.apply(this, arguments);
 
   // 'EX' to set expiration time in seconds as 4th arg
-  redisClient.hset(this.hashKey, redisKey, JSON.stringify(result), 'EX', 3600);
+  redisClient.hset(this.hashKey, redisKey, JSON.stringify(queryResult), 'EX', 3600);
   return queryResult;
 }
 
 module.exports = {
   clearHash(hashKey) {
     const redisKey = JSON.stringify(hashKey);
+    console.log("Clearing hash key...");
     redisClient.del(redisKey);
   }
 }

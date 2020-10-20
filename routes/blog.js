@@ -3,7 +3,7 @@ const express = require('express');
 
 const blogController = require('../controllers/blog');
 const isAuth = require('../middlewares/isAuth');
-const cleanCache = require('../services/cleanCache');
+const cleanCache = require('../middlewares/cleanCache');
 
 const router = express.Router();
 
