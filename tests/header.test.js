@@ -16,4 +16,11 @@ test('Can launch a browser', async () => {
 
   //Creating a new tab in browser instance
   const page = await browser.newPage();
+
+  // Navigate to localhost in tab
+  await page.goto('localhost:3000');
+
+  // Extracting text from logo using css selector
+  const text = await page.$eval('a.brand-logo', el => el.innerHTML);
+  expect(text).toEqual('Blogster');
 })
