@@ -41,3 +41,25 @@ test('Clicking login starts OAuth flow', async () => {
 
   expect(pageUrl).toMatch(/accounts\.google\.com/);
 })
+
+test('When signed in, shows logout', async () => {
+  const { Buffer } = require('safe-buffer');
+  const Keygrip = require('keygrip');
+  const keys = require('../config/keys');
+
+  // User ID existing in DB to create fake session for testing
+  const userId = process.env.USER_ID;
+  const sessionObj = {
+    passport: {
+      id: userId
+    }
+  };
+
+  const sessionString = Buffer.from(
+    JSON.stringify(sessionObj)
+  ).toString('base64');
+
+  const keygrip = new Keygrip([keys.cookieKey]);
+  // Signing the session to check for tampering
+  const sessionSign = keygrip.sign(`session=${sessionObj}`);
+})
