@@ -42,7 +42,8 @@ test('Clicking login starts OAuth flow', async () => {
   expect(pageUrl).toMatch(/accounts\.google\.com/);
 })
 
-test('When signed in, shows logout', async () => {
+// .only will run only below test
+test.only('When signed in, shows logout', async () => {
   const { Buffer } = require('safe-buffer');
   const Keygrip = require('keygrip');
   const keys = require('../config/keys');
@@ -62,4 +63,11 @@ test('When signed in, shows logout', async () => {
   const keygrip = new Keygrip([keys.cookieKey]);
   // Signing the session to check for tampering
   const sessionSign = keygrip.sign(`session=${sessionObj}`);
+
+  // Setting cookie to fake auth for userId above
+  await page.setCookie({ name: 'session', value: sessionString });
+  await page.setCookie({ name: 'session.sig', value: sessionSign });
+
+  // Refreshing the page to that app re renders and updated header is present
+  await page.goto('localhost:3000');
 })
