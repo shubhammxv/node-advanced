@@ -29,8 +29,15 @@ afterEach(async () => {
   await browser.close();
 })
 
-test('Can launch a browser', async () => {
+test('Header has correct text', async () => {
   // Extracting text from logo using css selector
   const text = await page.$eval('a.brand-logo', el => el.innerHTML);
   expect(text).toEqual('Blogster');
+})
+
+test('Clicking login starts OAuth flow', async () => {
+  await page.click('.right a');
+  const pageUrl = await page.url();
+
+  expect(pageUrl).toMatch(/accounts\.google\.com/);
 })
