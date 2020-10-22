@@ -63,11 +63,18 @@ test.only('When signed in, shows logout', async () => {
   const keygrip = new Keygrip([keys.cookieKey]);
   // Signing the session to check for tampering
   const sessionSign = keygrip.sign(`session=${sessionObj}`);
-
+ 
   // Setting cookie to fake auth for userId above
   await page.setCookie({ name: 'session', value: sessionString });
   await page.setCookie({ name: 'session.sig', value: sessionSign });
 
   // Refreshing the page to that app re renders and updated header is present
   await page.goto('localhost:3000');
+
+  // We might goto home page, but the page might not have fully rendered to find the elements
+  // Waiting for until the elements are visible; if below element not found then test fails
+  await page.waitFor('a[href="/auth/logout"]');
+
+  const text = await page.$eval('a[href="/auth/logout"]', el => el.innerHTML);
+  expect(text).toEqual('Logout');
 })
