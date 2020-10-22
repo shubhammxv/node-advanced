@@ -1,11 +1,7 @@
 
 // All ops are async in puppeteer
 const puppeteer = require('puppeteer');   // To Launch a new chromium instance
-
-// test('Adds two numbers', () => {
-//   const sum = 1 + 2;
-//   expect(sum).toEqual(3);     // assert, should
-// })
+const sessionFactory = require('./factories/sessionFactory');
 
 let browser, page;
 
@@ -44,26 +40,8 @@ test('Clicking login starts OAuth flow', async () => {
 
 // .only will run only below test
 test.only('When signed in, shows logout', async () => {
-  const { Buffer } = require('safe-buffer');
-  const Keygrip = require('keygrip');
-  const keys = require('../config/keys');
+  const { sessionString, sessionSign } = sessionFactory(userId);
 
-  // User ID existing in DB to create fake session for testing
-  const userId = process.env.USER_ID;
-  const sessionObj = {
-    passport: {
-      id: userId
-    }
-  };
-
-  const sessionString = Buffer.from(
-    JSON.stringify(sessionObj)
-  ).toString('base64');
-
-  const keygrip = new Keygrip([keys.cookieKey]);
-  // Signing the session to check for tampering
-  const sessionSign = keygrip.sign(`session=${sessionObj}`);
- 
   // Setting cookie to fake auth for userId above
   await page.setCookie({ name: 'session', value: sessionString });
   await page.setCookie({ name: 'session.sig', value: sessionSign });
