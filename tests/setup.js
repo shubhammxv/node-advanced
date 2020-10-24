@@ -1,3 +1,8 @@
+
+jest.setTimeout(30000);         // Changing default timeout of a test from 5seconds to 30seconds
+// Waits for 30seconds before failing the test
+// bad idea if we wait for an element to appear nad it doesn't
+
 require('dotenv').config();
 
 const mongoose = require('mongoose');
@@ -12,5 +17,5 @@ mongoose.connect(
 ).then(res => {
 
 }).catch(err => {
-  
+
 })
