@@ -1,37 +1,20 @@
 
-// All ops are async in puppeteer
-// const puppeteer = require('puppeteer');   // To Launch a new chromium instance
-const sessionFactory = require('./factories/sessionFactory');
-const userFactory = require('./factories/userFactory');
 const Page = require('./helpers/page');   // CustomPage; Wraps everything we do with puppeteer
 
-let browser, page;
+let page;
 
-// Runs before every test
 beforeEach(async () => {
-  // Making headless false we can see gui in screen
-  // Normally run in headless mode; makes tests run faster
-  // browser = await puppeteer.launch({
-  //   headless: false
-  // });
-
-  //Creating a new tab in browser instance
-  // page = await browser.newPage();
-  // Navigate to localhost in tab
-
   page = await Page.build();      // CustomPage
   await page.goto('localhost:3000');
 })
 
-// Runs after each test; like a cleanup for browser instances
 afterEach(async () => {
-  // Close the running browser instance
   await page.close();
 })
 
 test('Header has correct text', async () => {
   // Extracting text from logo using css selector
-  const text = await page.$eval('a.brand-logo', el => el.innerHTML);
+  const text = await page.getContent('a.brand-logo');
   expect(text).toEqual('Blogster');
 })
 
@@ -44,21 +27,9 @@ test('Clicking login starts OAuth flow', async () => {
 
 // .only will run only below test
 test.only('When signed in, shows logout', async () => {
-  // Creating a new user every time when testing
-  const user = await userFactory();
-  const { sessionString, sessionSign } = sessionFactory(user);
+  // Logging In using custom page and fn defined
+  await page.login();
 
-  // Setting cookie to fake auth for userId above
-  await page.setCookie({ name: 'session', value: sessionString });
-  await page.setCookie({ name: 'session.sig', value: sessionSign });
-
-  // Refreshing the page to that app re renders and updated header is present
-  await page.goto('localhost:3000');
-
-  // We might goto home page, but the page might not have fully rendered to find the elements
-  // Waiting for until the elements are visible; if below element not found then test fails
-  await page.waitFor('a[href="/auth/logout"]');
-
-  const text = await page.$eval('a[href="/auth/logout"]', el => el.innerHTML);
+  const text = await page.getContent('a[href="/auth/logout"]');
   expect(text).toEqual('Logout');
 })
