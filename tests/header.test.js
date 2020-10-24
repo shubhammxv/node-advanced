@@ -1,7 +1,9 @@
 
 // All ops are async in puppeteer
-const puppeteer = require('puppeteer');   // To Launch a new chromium instance
+// const puppeteer = require('puppeteer');   // To Launch a new chromium instance
 const sessionFactory = require('./factories/sessionFactory');
+const userFactory = require('./factories/userFactory');
+const Page = require('./helpers/page');   // CustomPage; Wraps everything we do with puppeteer
 
 let browser, page;
 
@@ -9,20 +11,22 @@ let browser, page;
 beforeEach(async () => {
   // Making headless false we can see gui in screen
   // Normally run in headless mode; makes tests run faster
-  browser = await puppeteer.launch({
-    headless: false
-  });
+  // browser = await puppeteer.launch({
+  //   headless: false
+  // });
 
   //Creating a new tab in browser instance
-  page = await browser.newPage();
+  // page = await browser.newPage();
   // Navigate to localhost in tab
+
+  page = await Page.build();      // CustomPage
   await page.goto('localhost:3000');
 })
 
 // Runs after each test; like a cleanup for browser instances
 afterEach(async () => {
   // Close the running browser instance
-  await browser.close();
+  await page.close();
 })
 
 test('Header has correct text', async () => {
@@ -40,7 +44,9 @@ test('Clicking login starts OAuth flow', async () => {
 
 // .only will run only below test
 test.only('When signed in, shows logout', async () => {
-  const { sessionString, sessionSign } = sessionFactory(userId);
+  // Creating a new user every time when testing
+  const user = await userFactory();
+  const { sessionString, sessionSign } = sessionFactory(user);
 
   // Setting cookie to fake auth for userId above
   await page.setCookie({ name: 'session', value: sessionString });
