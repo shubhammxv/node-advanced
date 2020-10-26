@@ -1,0 +1,10 @@
+nohup => no hang up
+& in last cmd => Run process in bg
+
+Calendar
+$ cal
+$ npm run start &
+$ nohup npm run start &
+
+To kill the process running in bg
+$ pkill node

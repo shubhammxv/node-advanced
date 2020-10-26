@@ -13,4 +13,8 @@ cache:
     - client/node_modules
 install:
   - npm install
-  - npm run xyz
+  - npm run build
+script:
+  - nohup npm run start &
+  - sleep 3     # Waiting for about 3sec to let the server start and then running the server
+  - npm run test
