@@ -24,4 +24,43 @@ describe('When logged in', async () => {
     const text = page.getContent('form label');
     expect(text).toEqual('Blog Title');
   })
+
+  describe('Using Valid Inputs', async () => {
+    beforeEach(async () => {
+      await page.type('.title input', 'Testing title input!');
+      await page.type('.content input', 'Testing content input!');
+      await page.click('form button');
+    })
+
+    test('Submitting takes user to review', async () => {
+      const text =  await page.getContent('h5');
+      expect(text).toEqual('Please confirm your entries');
+    })
+
+    test('Saving blog adds blog to blogs page', async () => {
+      await page.click('button.green');
+      // Using waitFor whenever there is an API or AJAX req to backend
+      await page.waitFor('.card');
+
+      const title = await page.getContent('.card-title');
+      const content = await page.getContent('p');
+
+      expect(title).toEqual('Testing title input!');
+      expect(content).toEqual('Testing content input!');
+    })
+  })
+
+  describe('Using invalid inputs', async () => {
+    beforeEach(async () => {
+      await page.click('form button');
+    })
+
+    test('Blog form shows a validation error', async () => {
+      const titleError = await page.getContent('title .red-text');
+      const contentError = await page.getContent('content .red-text');
+
+      expect(titleError).toEqual('You must provide a value');
+      expect(contentError).toEqual('You must provide a value');
+    })
+  })
 })
