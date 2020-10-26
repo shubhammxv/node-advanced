@@ -14,3 +14,9 @@ Changing Git Origin
 $ git remote -v
 $ git remote remove origin
 $ git remote add origin <link>
+
+
+Goto travis-ci.org
+signup using github
+
+Select repo by clicking on + on left side
