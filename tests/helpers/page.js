@@ -45,6 +45,37 @@ class CustomPage {
   async getContent(selector) {
     return this.page.$eval(selector, el => el.innerHTML);
   }
+
+  get(path) {
+    // Whole function will be converted in string and sent to chromium instance
+    // So path won't be available as variable
+    // Passing as 2nd arg to pass path as arg
+    // path gets passed as url in arrow function
+    return this.page.evaluate(
+      (url) => {
+        return fetch(url, {
+          method: 'GET',
+          credentials: 'same-origin',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }).then(res => res.json())
+      }, path)
+  }
+
+  post(path, body) {
+    return this.page.evaluate(
+      (url, data) => {
+        return fetch(url, {
+          method: 'POST',
+          credentials: 'same-origin',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        }).then(res => res.json())
+      }, path, body)
+  }
 }
 
 module.exports = CustomPage;
