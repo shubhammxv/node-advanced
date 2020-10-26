@@ -76,6 +76,14 @@ class CustomPage {
         }).then(res => res.json())
       }, path, body)
   }
+
+  execRequests(actions) {
+    return Promise.all(
+      actions.map({ method, path, data } => {
+        return this[method](path, data);
+      })
+    )
+  }
 }
 
 module.exports = CustomPage;

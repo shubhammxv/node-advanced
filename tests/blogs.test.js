@@ -66,6 +66,13 @@ describe('When logged in', async () => {
 })
 
 describe('When not logged in', async () => {
+  const actions = [
+    {
+      method: 'GET',
+      path: '/api/blogs'
+    }
+  ]
+  
   test('Can\'t create a blog post', async () => {
     const result = await page.post(
       '/api/blogs',
@@ -82,5 +89,13 @@ describe('When not logged in', async () => {
     const result = await page.get('/api/blogs');
 
     expect(result).toEqual({ error: 'Not Authenticated!' });
+  })
+
+  test('Blog related actions are prohibited!', async () => {
+    const results = await page.execRequests(actions);
+
+    for (let result of results) {
+      expect(result).toEqual({ error: 'Not Authenticated!' });
+    }
   })
 })
