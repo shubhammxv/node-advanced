@@ -8,3 +8,9 @@ $ nohup npm run start &
 
 To kill the process running in bg
 $ pkill node
+
+
+Changing Git Origin
+$ git remote -v
+$ git remote remove origin
+$ git remote add origin <link>
