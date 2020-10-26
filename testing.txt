@@ -1,0 +1,22 @@
+nohup => no hang up
+& in last cmd => Run process in bg
+
+Calendar
+$ cal
+$ npm run start &
+$ nohup npm run start &
+
+To kill the process running in bg
+$ pkill node
+
+
+Changing Git Origin
+$ git remote -v
+$ git remote remove origin
+$ git remote add origin <link>
+
+
+Goto travis-ci.org
+signup using github
+
+Select repo by clicking on + on left side
