@@ -2,9 +2,18 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { fetchBlog } from '../../actions';
 
+const BUCKET_URI = 'https://'
+
 class BlogShow extends Component {
   componentDidMount() {
     this.props.fetchBlog(this.props.match.params._id);
+  }
+
+  renderImage() {
+    if (this.props.blog.imageUrl) {
+      const imgUri = `${BUCKET_URI}/${this.props.blog.imageUrl}`;
+      return <img src={imgUri} />
+    }
   }
 
   render() {
