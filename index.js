@@ -9,6 +9,7 @@ const keys = require('./config/keys');
 
 const authRoutes = require('./routes/auth');
 const blogRoutes = require('./routes/blog');
+const uploadRoutes = require('./routes/upload');
 
 require('./services/passport');
 require('./services/cache');
@@ -30,6 +31,7 @@ app.use(passport.session());
 
 app.use(authRoutes);
 app.use(blogRoutes);
+app.use(uploadRoutes);
 
 if (['production', 'ci'].includes(process.env.NODE_ENV)) {
   app.use(express.static('client/build'));
